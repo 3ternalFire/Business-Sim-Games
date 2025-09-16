@@ -11,21 +11,30 @@ public class EyeController : MonoBehaviour
     public int pokesNeededToClose = 3;
 
     private int pokeCount = 0;
-
     public Animator eyeAnimator;
+
+    private CharacterMover mover;
+
+    public void SetCharacterMover(CharacterMover cm)
+    {
+        mover = cm;
+    }
 
     public void Poke()
     {
-        if (currentState != EyeState.Open) return;
+        // Don’t allow poking if moving or already closed/hurt
+        if (currentState != EyeState.Open || (mover != null && mover.IsMoving()))
+            return;
 
         pokeCount++;
         currentState = EyeState.Hurt;
-        Debug.Log(name + " eye poked!");
         eyeAnimator.SetBool("EyeClosed", true);
+        mover?.OnEyePoked();
 
         if (pokeCount >= pokesNeededToClose)
         {
             CloseEye();
+
         }
         else
         {
@@ -36,16 +45,19 @@ public class EyeController : MonoBehaviour
 
     public void OpenEye()
     {
+        if (mover != null && mover.IsMoving())
+            return; // don't open if face is moving
+
         eyeAnimator.SetBool("EyeClosed", false);
         currentState = EyeState.Open;
     }
 
-    private void CloseEye()
+    public void CloseEye()
     {
         currentState = EyeState.Closed;
         eyeAnimator.SetBool("EyeClosed", true);
-        Debug.Log(name + " eye closed!");
     }
+
     public void ResetEyeCounter()
     {
         pokeCount = 0;

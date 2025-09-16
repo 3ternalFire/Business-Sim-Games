@@ -5,12 +5,28 @@ using UnityEngine;
 
 public class PokeManager : MonoBehaviour
 {
+    public static PokeManager Instance;
     public EyeController leftEye;
     public EyeController rightEye;
     public HandAnimator handAnimator;
     public TextMeshProUGUI scoreText;
-    public int score = 0;
 
+    private int score = 0;
+
+    [SerializeField]
+    private RoundTimer roundTimer;
+
+    private void Awake()
+    {
+        if(Instance != null)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
     void OnEnable()
     {
         InputManager.OnScreenTapped += TryPoke;
@@ -45,7 +61,7 @@ public class PokeManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Missed poke! " + tappedArea);
+            handAnimator.PokeAtLane(laneIndex);
         }
     }
 
@@ -82,5 +98,10 @@ public class PokeManager : MonoBehaviour
         if (maxScreen.x < laneMin || minScreen.x > laneMax)
             return false; // No overlap
         return true; // Overlaps
+    }
+
+    public int GetScore()
+    {
+        return score;
     }
 }

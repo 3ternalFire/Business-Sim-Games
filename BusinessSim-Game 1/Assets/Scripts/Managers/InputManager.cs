@@ -9,8 +9,11 @@ public class InputManager : MonoBehaviour
 {
     public static UnityAction<TapArea> OnScreenTapped;
 
+    public RoundTimer timer;
+
     void Update()
     {
+        if (!timer.CanScore()) return;
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);

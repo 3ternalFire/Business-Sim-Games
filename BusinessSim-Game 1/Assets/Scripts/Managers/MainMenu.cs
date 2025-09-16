@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private TextMeshProUGUI _highScoreText;
+
+    private void OnEnable()
     {
-        
+        _highScoreText.text = $"High Score: \n 00{PlayerPrefs.GetInt("HighScore", 0)}";
+    }
+    public void PlayGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ResetStats()
     {
-        
+        PlayerPrefs.SetInt("HighScore", 0);
+        PlayerPrefs.Save();
+        _highScoreText.text = $"High Score: \n 00{PlayerPrefs.GetInt("HighScore", 0)}";
     }
 }
