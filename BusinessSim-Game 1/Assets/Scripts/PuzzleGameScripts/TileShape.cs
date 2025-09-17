@@ -9,9 +9,14 @@ using Unity.VisualScripting;
 public class TileShape : MonoBehaviour, ITapable
 {
     [SerializeField] private Vector2Int[] shapeOffset = new Vector2Int[4];
+    [Header("Prefab")]
     [SerializeField] private GameObject visuals;
+    [SerializeField] private GameObject shadow;
+    [Space]
     [SerializeField] private float duration = 0.5f;
     [SerializeField] private float selectedScale = 1.2f;
+    [Header("Audio Clips")]
+    [SerializeField] private AudioClip blockPlaced;
     private bool isHeld;
     private Vector2 touchOffset;
 
@@ -34,6 +39,7 @@ public class TileShape : MonoBehaviour, ITapable
     private void Awake()
     {
         if(visuals != null) localScale = visuals.transform.localScale;
+        shadow.SetActive(false);
         SetStartSpawn();
     }
 
@@ -77,7 +83,8 @@ public class TileShape : MonoBehaviour, ITapable
             isHeld = true;
             touchOffset = PuzzleGame.InputManager.instance.GetTouchPos() - (Vector2)transform.position;
             localScale = visuals.transform.localScale;
-            if(visuals != null) visuals.transform.localScale *= selectedScale;
+            shadow.SetActive(true);
+            if (visuals != null) visuals.transform.localScale *= selectedScale;
         }
     }
 
@@ -88,13 +95,16 @@ public class TileShape : MonoBehaviour, ITapable
             isHeld = false;
             touchOffset = Vector2.zero;
             elapsedTime = 0;
+            shadow.SetActive(false);
             if (CheckGridPosition())
             {
+                SoundManager.instance.SetAudio(blockPlaced);
                 foreach(Tile tile in tempList)
                 {
                     tile.SetSelected(false);
                     tile.SetTileType(TileType.Wooden);
                 }
+                Grid.instance.CheckForCompletedLines();
                 tempList.Clear();
                 Destroy(gameObject);
             }

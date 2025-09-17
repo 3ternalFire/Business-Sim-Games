@@ -1,22 +1,28 @@
 ﻿using PuzzleGame;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.Events;
 
 public class Grid : MonoBehaviour
 {
     [SerializeField] private Vector2Int grid;
     [SerializeField] private Vector2 touchOffset = new Vector2(-1f, -1f);
     [SerializeField] private float cellSize = 2f;
+    [SerializeField] private int basePoints = 2;
+    [SerializeField] private int jewelPoints = 5;
+    [Space]
+    [SerializeField] private AudioClip scoreSound;
 
     [SerializeField] private Tile _tilePrefab;
 
     private Dictionary<Vector2Int, Tile> _tiles = new Dictionary<Vector2Int, Tile>();
 
     public static Grid instance;
+    public static UnityAction<int> OnScoreAdded;
+    public static UnityAction<int> OnLinesDestroyed;
 
-
+    private int score;
+    
     private void Awake()
     {
         if(instance != null)
@@ -77,6 +83,7 @@ public class Grid : MonoBehaviour
     public void CheckForCompletedLines()
     {
         List<List<Tile>> completedLines = new List<List<Tile>>();
+        int jewelCount = 0;
 
         // Check rows
         for (int y = 0; y < grid.y; y++)
@@ -88,7 +95,6 @@ public class Grid : MonoBehaviour
             {
                 Tile tile = _tiles[new Vector2Int(x, y)];
                 row.Add(tile);
-
                 if (tile.tileType == TileType.Empty) // 👈 adjust depending on your enum
                 {
                     rowComplete = false;
@@ -105,12 +111,10 @@ public class Grid : MonoBehaviour
         {
             List<Tile> column = new List<Tile>();
             bool colComplete = true;
-
             for (int y = 0; y < grid.y; y++)
             {
                 Tile tile = _tiles[new Vector2Int(x, y)];
                 column.Add(tile);
-
                 if (tile.tileType == TileType.Empty)
                 {
                     colComplete = false;
@@ -131,16 +135,26 @@ public class Grid : MonoBehaviour
             {
                 foreach (var tile in line)
                 {
-                    tile.SetTileType(TileType.Empty);
-                    tilesCleared++;
+                    if(tile.tileType is TileType.Jewel)
+                    {
+                        jewelCount++;
+                    }
+                    if(tile.tileType is TileType.Wooden)
+                    {
+                        tilesCleared++;
+                    }
+                    tile.SetTileType(TileType.Empty, true);
                 }
             }
 
-            //// Combo multiplier (e.g., 2 lines = 2x score)
-            //int points = tilesCleared * basePoints * completedLines.Count;
-            //score += points;
+            // Combo multiplier (e.g., 2 lines = 2x score)
+            int points = ((tilesCleared * basePoints) + (jewelCount * jewelPoints)) * completedLines.Count;
+            score += points;
+            SoundManager.instance.SetAudio(scoreSound);
+            OnScoreAdded?.Invoke(score);
+            OnLinesDestroyed?.Invoke(tilesCleared);
 
-            //Debug.Log($"Cleared {completedLines.Count} lines, +{points} points! Total Score: {score}");
+            Debug.Log($"Cleared {completedLines.Count} lines, +{points} points! Total Score: {score}");
         }
     }
 }

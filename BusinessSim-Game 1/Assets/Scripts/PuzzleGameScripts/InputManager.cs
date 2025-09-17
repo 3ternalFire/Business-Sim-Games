@@ -62,7 +62,7 @@ namespace PuzzleGame
                     touchPos = new Vector2Int(x, y);
 
                         currentClick = Time.time;
-                        Debug.Log(touchPos);
+                        //Debug.Log(touchPos);
                         return true;
                 }
             }

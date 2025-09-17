@@ -156,7 +156,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 3
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: fd5d721742168de4bb83281a0d863290, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -220,6 +220,7 @@ MonoBehaviour:
   _selectedColor: {r: 0.165, g: 0.156, b: 0.104, a: 0}
   _spriteRenderer: {fileID: 2126109271334535120}
   selectedPrefab: {fileID: 4242532480054207169}
+  fxPrefab: {fileID: 6267141317013563329, guid: d60280fe739bc5e47b0911f7caf6e248, type: 3}
   woodenSprite: {fileID: 21300000, guid: 0ba11cf12032de743a86b321e99dbe3e, type: 3}
   emptySprite: {fileID: 21300000, guid: 1762987f018a7b744b0f915156eaeefe, type: 3}
   jewelSprite: {fileID: 21300000, guid: 00a517bef17a4bd4880a084a4688c5cd, type: 3}
