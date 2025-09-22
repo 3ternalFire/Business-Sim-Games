@@ -5,10 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Wood Puzzle/Puzzle Main Menu.unity
     guid: 9dc20d54e0ee80042ab0bb2f0839733d
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Wood Puzzle/WoodPuzzleScene.unity
     guid: 82b87d61ba893f14eadb77ddc0f9e75f
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: c2444104deaffe340b020f515be7d121
+  - enabled: 1
+    path: Assets/Scenes/EyePokeScene.unity
+    guid: 3cb738d586b2a7241b9c470f73e8dba5
   m_configObjects: {}

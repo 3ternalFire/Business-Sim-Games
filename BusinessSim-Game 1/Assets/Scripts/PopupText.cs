@@ -7,6 +7,8 @@ public class PopupText : MonoBehaviour
     [SerializeField] private TextMeshProUGUI text; // assign in inspector
     [SerializeField] private float duration = 1.5f;
     [SerializeField] private float maxScale = 1.5f;
+    [SerializeField] private AudioClip clip;
+    [SerializeField] private AudioSource source;
 
     private void OnEnable()
     {
@@ -32,6 +34,8 @@ public class PopupText : MonoBehaviour
 
         text.transform.localScale = startScale;
         text.enabled = true;
+        source.clip = clip;
+        source.Play();
 
         // Grow + fade in
         while (time < duration * 0.5f)
